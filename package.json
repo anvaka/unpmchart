@@ -11,5 +11,20 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/anvaka/unpmchart"
+  },
+  "dependencies": {
+    "bluebird": "^2.10.2",
+    "glslify": "^2.3.1",
+    "react": "^0.14.0",
+    "react-dom": "^0.14.0",
+    "react-list": "^0.7.3",
+    "three": "^0.72.0",
+    "three.fly": "^0.1.6"
+  },
+  "devDependencies": {
+    "babelify": "^6.3.0",
+    "browserify": "^11.2.0",
+    "gulp": "^3.9.0",
+    "vinyl-source-stream": "^1.1.0"
   }
 }
