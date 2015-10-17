@@ -1,7 +1,9 @@
-import request from './lib/request.js';
-import createStage from './lib/createStage.js';
-
-const endpoint = 'http://localhost:9003/';
+/**
+ * Main entry point
+ */
+import request from './utils/request.js';
+import createStage from './createStage.js';
+import {endpoint} from './config.js';
 
 var stage = createStage();
 request(endpoint + 'labels.json', {
@@ -21,6 +23,5 @@ function downloadTest() {
 }
 
 function setHistogram(res) {
-  debugger;
   stage.setHistogram(res);
 }

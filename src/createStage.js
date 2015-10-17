@@ -16,6 +16,7 @@ function createStage() {
     setLabels,
     setHistogram
   };
+
   return api;
 
   function setLabels(newLabels) {
@@ -38,10 +39,11 @@ function createStage() {
 
     var color = new THREE.Color();
     for (var i = 0; i < keys.length; ++i) {
-      setColor(histogram[keys[i]], color.setHSL(i / keys.length, 1.0, 0.5));
+      var pkgIndex = histogram[keys[i]];
+      setColor(pkgIndex, color.setHSL(i / keys.length, 1.0, 0.5));
     }
-
     geometry.getAttribute('customColor').needsUpdate = true;
+
     function byCount(x, y) {
       return histogram[y].length - histogram[x].length;
     }

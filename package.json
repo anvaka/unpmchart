@@ -4,7 +4,8 @@
   "description": "particle chart",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "gulp"
   },
   "author": "Andrei Kashcha",
   "license": "MIT",
@@ -25,6 +26,9 @@
     "babelify": "^6.3.0",
     "browserify": "^11.2.0",
     "gulp": "^3.9.0",
+    "gulp-batch": "^1.0.5",
+    "gulp-util": "^3.0.6",
+    "gulp-watch": "^4.3.5",
     "vinyl-source-stream": "^1.1.0"
   }
 }
