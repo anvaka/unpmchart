@@ -1,27 +1,16 @@
 /**
  * Main entry point
  */
-import request from './utils/request.js';
-import createStage from './createStage.js';
-import {endpoint} from './config.js';
+import {createStore} from 'redux';
+import {initDispatcher} from './dispatcher.js';
+import initNative from './native/init.js';
+import mainReducer from './app/mainReducer.js';
+import startReact from './app/startReact.js';
 
-var stage = createStage();
-request(endpoint + 'labels.json', {
-  responseType: 'json'
-}).then(setLabels)
-  .then(downloadTest)
-  .then(setHistogram);
+// first we need to init the global dipatcher
+var store = createStore(mainReducer);
+initDispatcher(store);
+startReact(store);
 
-function setLabels(res) {
-  stage.setLabels(res);
-}
-
-function downloadTest() {
-  return request(endpoint + 'test.json', {
-    responseType: 'json'
-  });
-}
-
-function setHistogram(res) {
-  stage.setHistogram(res);
-}
+// then we can create native three.js scene
+initNative();

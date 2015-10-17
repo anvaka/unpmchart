@@ -1,6 +1,7 @@
 import THREE from 'three';
 import fly from 'three.fly';
 import {VertexShader, FragmentShader} from './shaders/particle.js';
+import dispatch from '../dispatcher.js';
 export default createStage;
 
 const SIDE_LENGTH = 512;
@@ -37,11 +38,25 @@ function createStage() {
     var keys = Object.keys(histogram);
     keys.sort(byCount);
 
+    var legend = [];
     var color = new THREE.Color();
     for (var i = 0; i < keys.length; ++i) {
-      var pkgIndex = histogram[keys[i]];
-      setColor(pkgIndex, color.setHSL(i / keys.length, 1.0, 0.5));
+      var keyName = keys[i];
+      var indices = histogram[keyName];
+      var assignedColor = color.setHSL(i / keys.length, 1.0, 0.5);
+      legend.push({
+        name: keyName,
+        color: assignedColor.getHexString(),
+        count: indices.length
+      });
+
+      setColor(indices, assignedColor);
     }
+
+    dispatch({
+      type: 'legend',
+      legend
+    });
     geometry.getAttribute('customColor').needsUpdate = true;
 
     function byCount(x, y) {
@@ -132,7 +147,7 @@ function createStage() {
     var HEIGHT = window.innerHeight;
     renderer.setSize(WIDTH, HEIGHT);
 
-    var container = document.getElementById('three-container');
+    var container = document.getElementById('three-root');
     container.appendChild(renderer.domElement);
     controls = fly(camera, container, THREE);
     controls.movementSpeed = 10;

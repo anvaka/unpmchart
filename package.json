@@ -15,20 +15,30 @@
   },
   "dependencies": {
     "bluebird": "^2.10.2",
+    "bootstrap": "^3.3.5",
     "glslify": "^2.3.1",
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
     "react-list": "^0.7.3",
+    "react-redux": "^4.0.0",
+    "redux": "^3.0.2",
     "three": "^0.72.0",
     "three.fly": "^0.1.6"
   },
   "devDependencies": {
     "babelify": "^6.3.0",
     "browserify": "^11.2.0",
+    "connect-livereload": "^0.5.3",
+    "express": "^4.13.3",
     "gulp": "^3.9.0",
     "gulp-batch": "^1.0.5",
+    "gulp-concat": "^2.6.0",
+    "gulp-less": "^3.0.3",
     "gulp-util": "^3.0.6",
     "gulp-watch": "^4.3.5",
+    "less": "^2.5.3",
+    "port-number": "^1.0.0",
+    "tiny-lr": "^0.2.1",
     "vinyl-source-stream": "^1.1.0"
   }
 }
