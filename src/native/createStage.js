@@ -40,10 +40,15 @@ function createStage() {
 
     var legend = [];
     var color = new THREE.Color();
-    for (var i = 0; i < keys.length; ++i) {
+    var keysLength = keys.length;
+    var totalColors = 6;
+    var step = Math.round(keysLength / totalColors);
+    for (var i = 0; i < keysLength; ++i) {
       var keyName = keys[i];
       var indices = histogram[keyName];
-      var assignedColor = color.setHSL(i / keys.length, 1.0, 0.5);
+      var band = i % totalColors;
+      var hue = (band * step)/keysLength;
+      var assignedColor = color.setHSL(hue, 1.0, 0.5);
       legend.push({
         name: keyName,
         color: assignedColor.getHexString(),
