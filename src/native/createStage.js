@@ -25,14 +25,34 @@ function createStage() {
   function setLabels(newLabels) {
     labels = newLabels;
 
-    // hide invisible/not created packages:
-    var color = new THREE.Color();
-    for (var i = newLabels.length * 3; i < colors.length; i += 3) {
-      colors[i] = 0;
-      colors[i + 1] = 0;
-      colors[i + 2] = 0;
+    var legend = [];
+    var color = 0xffffff;
+    var maxBarPopulation = labels.length;
+    var barWidth = Math.ceil(maxBarPopulation/500);
+    for (var i = 0; i < labels.length; ++i) {
+      legend.push({
+        name: labels[i],
+        color: 'FFFFFF',
+        count: 1
+      });
+
+      var i3 = i * 3;
+      colors[i3] = 0xff;
+      colors[i3 + 1] = 0xff;
+      colors[i3 + 2] = 0xff;
+
+      var x = i % barWidth;
+      var y = (i / barWidth) | 0;
+
+      positions[i3 + 0] = x * pr;
+      positions[i3 + 1] = y * pr;
     }
 
+    dispatch({
+      type: 'legend',
+      legend
+    });
+    geometry.getAttribute('position').needsUpdate = true;
     geometry.getAttribute('color').needsUpdate = true;
   }
 
@@ -46,12 +66,17 @@ function createStage() {
     var totalColors = 6;
     var step = Math.round(keysLength / totalColors);
     var posIdx = 0;
+    var maxBarPopulation = histogram[keys[0]].length;
+    var barWidth = Math.ceil(maxBarPopulation/500);
+
     for (var i = 0; i < keysLength; ++i) {
       var keyName = keys[i];
       var indices = histogram[keyName];
+
       var band = i % totalColors;
       var hue = (band * step)/keysLength;
       var assignedColor = color.setHSL(hue, 1.0, 0.5);
+
       legend.push({
         name: keyName,
         color: assignedColor.getHexString(),
@@ -59,7 +84,7 @@ function createStage() {
       });
 
       setColor(indices, assignedColor);
-      setPositions(indices);
+      drawBar(indices, barWidth, i);
     }
 
     dispatch({
@@ -85,6 +110,17 @@ function createStage() {
         posIdx += 1;
       }
     }
+    function drawBar(indices, barWidth, offset) {
+      var dx = pr * offset * (barWidth + 20);
+      for (var i = 0; i < indices.length; ++i) {
+        var i3 = indices[i] * 3;
+        var x = i % barWidth;
+        var y = (i / barWidth) | 0;
+
+        positions[i3 + 0] = dx + x * pr;
+        positions[i3 + 1] = y * pr;
+      }
+    }
   }
 
   function setColor(indices, color) {
@@ -103,7 +139,7 @@ function createStage() {
   }
 
   function init() {
-    camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 20000);
+    camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000000);
     scene = new THREE.Scene();
 
     uniforms = {
@@ -119,7 +155,7 @@ function createStage() {
       fragmentShader: FragmentShader,
       blending: THREE.AdditiveBlending,
       depthTest: false,
-      transparent: true
+      transparent: true,
     });
 
     var particles = SIDE_LENGTH * SIDE_LENGTH;
@@ -129,28 +165,11 @@ function createStage() {
     positions = new Float32Array(particles * 3);
     colors = new Float32Array(particles * 3);
 
-    var color = new THREE.Color();
-
-    for (var x = 0; x < SIDE_LENGTH; ++x) {
-      for (var y = 0; y < SIDE_LENGTH; ++y) {
-        var i = x + y * SIDE_LENGTH;
-        var i3 = i * 3;
-        positions[i3 + 0] = x * pr;
-        positions[i3 + 1] = y * pr;
-        positions[i3 + 2] = 0;
-
-        color.setHSL(i / particles, 1.0, 0.5);
-
-        colors[i3 + 0] = color.r;
-        colors[i3 + 1] = color.g;
-        colors[i3 + 2] = color.b;
-      }
-    }
-
     geometry.addAttribute('position', new THREE.BufferAttribute(positions, 3));
     geometry.addAttribute('color', new THREE.BufferAttribute(colors, 3));
 
     var particleSystem = new THREE.Points(geometry, shaderMaterial);
+    particleSystem.frustumCulled = false;
 
     scene.add(particleSystem);
 
@@ -163,8 +182,10 @@ function createStage() {
     var container = document.getElementById('three-root');
     container.appendChild(renderer.domElement);
     controls = fly(camera, container, THREE);
-    controls.movementSpeed = 10;
-    camera.position.z = 200;
+    controls.movementSpeed = 100;
+    camera.position.z = 5700;
+    camera.position.x = 1700;
+    camera.position.y = 1800;
 
     window.addEventListener('resize', onWindowResize, false );
   }

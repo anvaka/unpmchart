@@ -1,27 +1,33 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Legend from './Legend.js';
+// TODO: Rename to Details?
+import Group from './GroupView.js';
 import FileSelector from './FileSelector.js';
+import { fetchFile, fetchHistogramIfNeeded } from '../actions/fetchFile.js';
 
 class MainView extends Component {
-   render() {
-     const {dispatch, files} = this.props;
-     return (
-       <div>
-        <FileSelector
-          files={files}
-          onSelected={file => dispatch({
-            type: 'fileChanged',
-            name: file
-          })} />
-        <Legend legend={this.props.legend}></Legend>
-       </div>
-     );
-   }
+  componentDidMount() {
+    const {dispatch} = this.props;
+    dispatch(fetchFile('labels.json'));
+  }
+
+  render() {
+    const {dispatch, files} = this.props;
+    return (
+      <div>
+        <FileSelector files={files} onSelected={file => dispatch(fetchHistogramIfNeeded(file))} />
+        <Legend></Legend>
+        <Group></Group>
+      </div>
+      );
+  }
 }
 
 export default connect(select)(MainView);
 
 function select(state) {
-  return state;
+  return {
+    files: state.mainPage.files
+  };
 }

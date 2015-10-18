@@ -1,14 +1,13 @@
 /**
  * Main entry point
  */
-import {createStore} from 'redux';
-import {initDispatcher} from './dispatcher.js';
+import { initDispatcher } from './dispatcher.js';
 import initNative from './native/init.js';
-import mainReducer from './app/mainReducer.js';
 import startReact from './app/startReact.js';
+import createStore from './app/createMainStore.js';
 
 // first we need to init the global dipatcher
-var store = createStore(mainReducer);
+let store = createStore();
 initDispatcher(store);
 startReact(store);
 

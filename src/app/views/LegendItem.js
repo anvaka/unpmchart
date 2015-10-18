@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import noop from 'nop';
 import formatNumber from '../utils/formatNumber.js';
 
-export default class LegendItem extends Component {
+class LegendItem extends Component {
   render() {
-    const { model } = this.props;
+    const { model, onClick } = this.props;
     let iconStyle = {
       backgroundColor: '#' + model.color,
       height: '18px',
@@ -11,7 +12,7 @@ export default class LegendItem extends Component {
     };
 
     return (
-      <div className='row'>
+      <div className='row' onClick={ e => onClick(model) }>
         <div className='col-md-1 col-xs-1' style={iconStyle}>
         </div>
         <div className='no-oveflow col-md-8 col-xs-8' title={model.name}>
@@ -24,3 +25,7 @@ export default class LegendItem extends Component {
   );
   }
 }
+
+LegendItem.defaultProps = { onClick: noop };
+
+export default LegendItem;

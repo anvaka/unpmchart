@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import ReactList from 'react-list';
 import LegendItem from './LegendItem.js';
 import formatNumber from '../utils/formatNumber.js';
 
-export default class LegendView extends Component {
+class LegendView extends Component {
   render() {
-    const { legend } = this.props;
+    const { legend, dispatch } = this.props;
     if (!legend) return null;
 
     return (
@@ -26,7 +27,12 @@ export default class LegendView extends Component {
 
     function renderItem(idx, key) {
       var vm = legend[idx];
-      return <LegendItem key={key} model={vm} />;
+      return <LegendItem key={key}
+        model={vm}
+        onClick={model => dispatch({
+          type: 'selectedGroupChanged',
+          name: model.name
+        })} />;
     }
   }
 }
@@ -34,3 +40,14 @@ export default class LegendView extends Component {
 function getHeight() {
   return 20;
 }
+
+function select(globalState) {
+  var state = globalState.mainPage;
+
+  return {
+    legend: state.legend,
+    selectedGroup: state.selectedGroup
+  };
+}
+
+export default connect(select)(LegendView);
