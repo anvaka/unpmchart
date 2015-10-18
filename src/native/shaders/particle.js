@@ -1,24 +1,21 @@
-let FragmentShader = `uniform vec3 color;
-uniform sampler2D texture;
+let FragmentShader = `
 
 varying vec3 vColor;
 
 void main() {
-
-  gl_FragColor = vec4( color * vColor, 1.0 );
-  gl_FragColor = gl_FragColor * texture2D( texture, gl_PointCoord );
+  gl_FragColor = vec4(vColor, 1.0);
 }`;
 
 
-let VertexShader = `attribute float size;
-attribute vec3 customColor;
-
+let VertexShader = `
+attribute vec3 color;
+uniform vec3 aspect;
 varying vec3 vColor;
 
 void main() {
-  vColor = customColor;
+  vColor = color;
   vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
-  gl_PointSize = size * ( 300.0 / length( mvPosition.xyz ) );
+  gl_PointSize = 20. * (600.0 / length( mvPosition.z ) )/aspect.x;
   gl_Position = projectionMatrix * mvPosition;
 }`;
 
