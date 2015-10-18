@@ -7,7 +7,7 @@ function mainPage(state = {}, action) {
     });
   }
 
-  if (action.type === 'fileChanged') {
+  if (action.type === 'histogramNameChanged') {
     return Object.assign({}, state, {
       selectedFile: action.name,
       selectedGroup: undefined
@@ -21,24 +21,28 @@ function mainPage(state = {}, action) {
   }
 
   if (action.type === 'receiveHistogram') {
-    return Object.assign({}, state, {
+    // TODO: doh, is this really how you have to do it?
+    return {
+      ...state,
       histogram: {
+        ...state.histogram,
         [action.name]: action.content
       }
-    });
+    };
+
+    //return newState;
   }
 
   if (action.type === 'receiveFile' && action.name === 'labels.json') {
     return Object.assign({}, state, {
-      labels: action.content
+      labels: action.content,
+      histogram: {
+        'all-npm': {
+          'npm': action.content.map(toIndex)
+        }
+      }
     });
   }
-
-
-  return state;
-}
-
-function labels(state = {}, action) {
 
   return state;
 }
@@ -64,4 +68,8 @@ function createGroupDetails(state, name) {
   function toName(index) {
     return state.labels[index];
   }
+}
+
+function toIndex(_, index) {
+  return index;
 }

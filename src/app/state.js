@@ -1,7 +1,7 @@
 let initialState = {
   mainPage: {
     files: [
-      'all npm',
+      'all-npm',
       'test',
       'test-clean',
       'deps-count',
@@ -10,7 +10,7 @@ let initialState = {
       'abc',
       'author'
     ],
-    selectedFile: 'all npm',
+    selectedFile: 'all-npm',
     selectedGroup: undefined,
 
     /**

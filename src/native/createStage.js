@@ -9,53 +9,16 @@ const SIDE_LENGTH = 512;
 function createStage() {
   var camera, renderer, scene, controls, geometry, uniforms;
   var positions, colors;
-  var labels;
 
   var pr = 10; // particle radius
   init();
   requestAnimationFrame(render);
 
   var api = {
-    setLabels,
     setHistogram
   };
 
   return api;
-
-  function setLabels(newLabels) {
-    labels = newLabels;
-
-    var legend = [];
-    var color = 0xffffff;
-    var maxBarPopulation = labels.length;
-    var barWidth = Math.ceil(maxBarPopulation/500);
-    for (var i = 0; i < labels.length; ++i) {
-      legend.push({
-        name: labels[i],
-        color: 'FFFFFF',
-        count: 1
-      });
-
-      var i3 = i * 3;
-      colors[i3] = 0xff;
-      colors[i3 + 1] = 0xff;
-      colors[i3 + 2] = 0xff;
-
-      var x = i % barWidth;
-      var y = (i / barWidth) | 0;
-
-      positions[i3 + 0] = x * pr;
-      positions[i3 + 1] = y * pr;
-    }
-
-    // This legend includes all packages. Probably should be npm.
-    dispatch({
-      type: 'legend',
-      legend
-    });
-    geometry.getAttribute('position').needsUpdate = true;
-    geometry.getAttribute('color').needsUpdate = true;
-  }
 
   function setHistogram(histogram) {
     var keys = Object.keys(histogram);

@@ -4,7 +4,6 @@
 import fetch from 'isomorphic-fetch';
 import {endpoint} from '../../config.js';
 import requestStarted from './requestStarted.js';
-import receiveFile from './receiveFile.js';
 
 export function fetchFile(fileName) {
   return dispatch => {
@@ -12,22 +11,25 @@ export function fetchFile(fileName) {
     dispatch(requestStarted(url));
     return fetch(url)
       .then(req => req.json())
-      .then(json => dispatch(receiveFile(fileName, json)));
+      .then(json => dispatch(receiveFile(fileName, json)))
+      .then(_ => dispatch(fetchHistogramIfNeeded('all-npm')));
   };
 }
 
 export function fetchHistogramIfNeeded(name) {
   return (dispatch, getState) => {
-    dispatch({ type: 'fileChanged', name: name });
-    if (shouldFetch(getState(), name)) {
+    dispatch({ type: 'histogramNameChanged', name: name });
+    let histogram = getHistogram(getState(), name);
+    if (!histogram) {
       return dispatch(fetchHistogram(name));
+    } else {
+      dispatch(receiveHistogram(name, histogram));
     }
   };
 }
 
-function shouldFetch(state, name) {
-  return !state.mainPage.histograms ||
-        !state.mainPage.histograms[name];
+function getHistogram(state, name) {
+  return state.mainPage.histogram && state.mainPage.histogram[name];
 }
 
 function fetchHistogram(name) {
@@ -43,6 +45,14 @@ function fetchHistogram(name) {
 function receiveHistogram(name, content) {
   return {
     type: 'receiveHistogram',
+    name,
+    content
+  };
+}
+
+function receiveFile(name, content) {
+  return {
+    type: 'receiveFile',
     name,
     content
   };
