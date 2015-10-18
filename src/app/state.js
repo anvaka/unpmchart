@@ -12,6 +12,7 @@ let initialState = {
     ],
     selectedFile: 'all npm',
     selectedGroup: undefined,
+
     /**
     * Array of all npm package names
     */

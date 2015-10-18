@@ -17,8 +17,10 @@ class MainView extends Component {
     return (
       <div>
         <FileSelector files={files} onSelected={file => dispatch(fetchHistogramIfNeeded(file))} />
-        <Legend></Legend>
-        <Group></Group>
+        <div className='legend-window'>
+          <Legend></Legend>
+          <Group></Group>
+        </div>
       </div>
       );
   }

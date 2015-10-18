@@ -9,10 +9,6 @@ function init() {
   bus.on('receiveFile', downloadNewFile);
   bus.on('receiveHistogram', setHistogram);
 
-  function setLabels(res) {
-    stage.setLabels(res);
-  }
-
   function setHistogram(action) {
     stage.setHistogram(action.content);
   }

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import ReactList from 'react-list';
 import LegendItem from './LegendItem.js';
 import formatNumber from '../utils/formatNumber.js';
+import getHeight from '../utils/getItemHeight.js';
 
 class LegendView extends Component {
   render() {
@@ -10,8 +11,7 @@ class LegendView extends Component {
     if (!legend) return null;
 
     return (
-      <div className='legend-window'>
-        <h3>Legend</h3>
+      <div className='legend pkg-panel'>
         <h4>
           <strong>{formatNumber(legend.length)}</strong> unique keys
         </h4>
@@ -35,10 +35,6 @@ class LegendView extends Component {
         })} />;
     }
   }
-}
-
-function getHeight() {
-  return 20;
 }
 
 function select(globalState) {

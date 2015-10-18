@@ -48,6 +48,7 @@ function createStage() {
       positions[i3 + 1] = y * pr;
     }
 
+    // This legend includes all packages. Probably should be npm.
     dispatch({
       type: 'legend',
       legend

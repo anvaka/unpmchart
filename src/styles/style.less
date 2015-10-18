@@ -1,5 +1,9 @@
 @import "../../node_modules/bootstrap/less/bootstrap.less";
 
+@panel-width: 300px;
+@primary-color: #ffffff;
+@secondary-color: #7F7F7F;
+
 body {
   background-color: #000000;
   font-family: 'Roboto', sans-serif;
@@ -26,12 +30,25 @@ h3, h4 {
   top: 0;
 }
 
-.legend-window,
-.group-window {
-  background-color: rgba(0, 0, 0, 0.8);
-  width: 300px;
-  overflow: hidden;
+.legend-window {
+  max-width: 600px;
+}
 
+.group-details {
+  position: absolute;
+  left: @panel-width;
+  top: 20px;
+}
+
+.pkg-panel {
+  width: @panel-width;
+  color: @secondary-color;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.8);
+
+  h4 strong {
+    color: @primary-color;
+  }
   .list-container {
     max-height: 300px;
     overflow-y: auto;
@@ -39,7 +56,7 @@ h3, h4 {
   }
 }
 
-.no-oveflow {
+.no-overflow {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;

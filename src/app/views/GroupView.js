@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import ReactList from 'react-list';
 import GroupItem from './GroupItem.js';
 import formatNumber from '../utils/formatNumber.js';
+import getHeight from '../utils/getItemHeight.js';
 
 class GroupView extends Component {
   render() {
@@ -11,9 +12,9 @@ class GroupView extends Component {
     let members = group.members;
 
     return (
-      <div className='group-window'>
-        <h4>
-          <strong>{formatNumber(members.length)}</strong> members of {group.name}
+      <div className='group-details pkg-panel'>
+        <h4 className='no-overflow' title={group.name}>
+          <strong>{group.name}</strong> ({formatNumber(members.length)} items)
         </h4>
 
         <div className='list-container'>
@@ -30,10 +31,6 @@ class GroupView extends Component {
       return <GroupItem key={key} name={name} />;
     }
   }
-}
-
-function getHeight() {
-  return 20;
 }
 
 function select(state) {
