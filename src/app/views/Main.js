@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Legend from './Legend.js';
+import Tooltip from './Tooltip.js';
+
 // TODO: Rename to Details?
 import Group from './GroupView.js';
 import FileSelector from './FileSelector.js';
@@ -13,7 +15,7 @@ class MainView extends Component {
   }
 
   render() {
-    const {dispatch, files} = this.props;
+    const {dispatch, files, tooltip} = this.props;
     return (
       <div>
         <FileSelector files={files} onSelected={file => dispatch(fetchHistogramIfNeeded(file))} />
@@ -21,6 +23,7 @@ class MainView extends Component {
           <Legend></Legend>
           <Group></Group>
         </div>
+        <Tooltip model={tooltip}/>
       </div>
       );
   }
@@ -30,6 +33,7 @@ export default connect(select)(MainView);
 
 function select(state) {
   return {
-    files: state.mainPage.files
+    files: state.mainPage.files,
+    tooltip: state.mainPage.tooltip
   };
 }

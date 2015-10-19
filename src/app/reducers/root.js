@@ -1,9 +1,15 @@
 import { combineReducers } from 'redux';
 
 function mainPage(state = {}, action) {
+  console.log(action.type);
   if (action.type === 'legend') {
     return Object.assign({}, state, {
       legend: action.legend
+    });
+  }
+  if (action.type === 'hover') {
+    return Object.assign({}, state, {
+      tooltip: getTooltipData(state, action.data)
     });
   }
 
@@ -29,22 +35,38 @@ function mainPage(state = {}, action) {
         [action.name]: action.content
       }
     };
-
-    //return newState;
   }
 
   if (action.type === 'receiveFile' && action.name === 'labels.json') {
+    let npmHisto =  {
+      'npm': action.content.map(toIndex)
+    };
+
     return Object.assign({}, state, {
       labels: action.content,
       histogram: {
-        'all-npm': {
-          'npm': action.content.map(toIndex)
-        }
+        'all-npm': npmHisto
       }
     });
   }
 
   return state;
+}
+
+function buildIndex(histogram) {
+  var index = [];
+  Object.keys(histogram).sort(byCount).forEach(function (name) {
+    index.push({
+      length: histogram[name].length,
+      name: name
+    });
+  });
+
+  return index;
+
+  function byCount(x, y) {
+    return histogram[y].length - histogram[x].length;
+  }
 }
 
 const rootReducer = combineReducers({
@@ -55,7 +77,7 @@ export default rootReducer;
 
 function createGroupDetails(state, name) {
   var response = {};
-  var histogram = state.histogram && state.histogram[state.selectedFile];
+  var histogram = getHistogram(state);
   var members = histogram && histogram[name];
   if (!members) return response;
 
@@ -70,6 +92,23 @@ function createGroupDetails(state, name) {
   }
 }
 
+function getHistogram(state) {
+  return state.histogram && state.histogram[state.selectedFile];
+}
+
 function toIndex(_, index) {
   return index;
+}
+
+function getTooltipData(state, data) {
+  if (!data || !data.index) {
+    return null;
+  }
+  var label = state.labels[data.index];
+
+  return {
+    name: label,
+    x: data.x,
+    y: data.y
+  };
 }

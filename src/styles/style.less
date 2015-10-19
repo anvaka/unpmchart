@@ -3,6 +3,7 @@
 @panel-width: 300px;
 @primary-color: #ffffff;
 @secondary-color: #7F7F7F;
+@border-color: #7F7F7F;
 
 body {
   background-color: #000000;
@@ -32,6 +33,15 @@ h3, h4 {
 
 .legend-window {
   max-width: 600px;
+}
+
+.tooltip-window {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 4px 10px;;
+  pointer-events: none;
+  min-width: 200px;
+  border: 1px solid @border-color;
 }
 
 .group-details {

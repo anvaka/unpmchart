@@ -2,15 +2,18 @@ import THREE from 'three';
 import fly from 'three.fly';
 import {VertexShader, FragmentShader} from './shaders/particle.js';
 import dispatch from '../dispatcher.js';
+import createHitTest from './hit-test.js';
+import getNearestIndex from './getNearestIndex.js';
 export default createStage;
 
 const SIDE_LENGTH = 512;
 
 function createStage() {
   var camera, renderer, scene, controls, geometry, uniforms;
-  var positions, colors;
+  var positions, colors, hitTest;
 
   var pr = 10; // particle radius
+  var lastHovered;
   init();
   requestAnimationFrame(render);
 
@@ -23,6 +26,7 @@ function createStage() {
   function setHistogram(histogram) {
     var keys = Object.keys(histogram);
     keys.sort(byCount);
+    hitTest.reset();
 
     var legend = [];
     var color = new THREE.Color();
@@ -99,6 +103,7 @@ function createStage() {
   function render() {
     requestAnimationFrame(render);
     renderer.render(scene, camera);
+    hitTest.update(scene, camera);
     controls.update(1);
     adjustMovementSpeed(controls, camera);
   }
@@ -151,7 +156,27 @@ function createStage() {
     camera.position.x = 1700;
     camera.position.y = 1800;
     adjustMovementSpeed(controls, camera);
-    window.addEventListener('resize', onWindowResize, false );
+    hitTest = createHitTest(particleSystem, container, controls);
+    hitTest.on('over', reportMouseOver);
+
+    window.addEventListener('resize', onWindowResize, false);
+  }
+
+  function reportMouseOver(e) {
+    var nearestIndex = getNearestIndex(positions, e.indexes, e.ray, 30);
+    if (lastHovered === nearestIndex) return;
+    lastHovered = nearestIndex;
+    // each node has three coordinages.
+    var modelIndex = lastHovered === undefined ? undefined: lastHovered/3;
+
+    dispatch({
+      type: 'hover',
+      data: {
+        index: modelIndex,
+        x: e.x,
+        y: e.y
+      }
+    });
   }
 
   function onWindowResize() {
