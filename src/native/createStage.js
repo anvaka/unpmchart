@@ -100,6 +100,7 @@ function createStage() {
     requestAnimationFrame(render);
     renderer.render(scene, camera);
     controls.update(1);
+    adjustMovementSpeed(controls, camera);
   }
 
   function init() {
@@ -146,11 +147,10 @@ function createStage() {
     var container = document.getElementById('three-root');
     container.appendChild(renderer.domElement);
     controls = fly(camera, container, THREE);
-    controls.movementSpeed = 100;
     camera.position.z = 5700;
     camera.position.x = 1700;
     camera.position.y = 1800;
-
+    adjustMovementSpeed(controls, camera);
     window.addEventListener('resize', onWindowResize, false );
   }
 
@@ -164,5 +164,13 @@ function createStage() {
 
   function getCameraUniform() {
     return new THREE.Vector3(camera.aspect, window.innerWidth, window.innerHeight);
+  }
+
+
+  function adjustMovementSpeed(controls, camera) {
+    var absZ = Math.abs(camera.position.z);
+    var z = Math.min(absZ, 5700);
+    var speed = Math.max(0.1, z / 57);
+    controls.movementSpeed = speed;
   }
 }
