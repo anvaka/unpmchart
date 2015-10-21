@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Legend from './Legend.js';
 import Tooltip from './Tooltip.js';
+import GlobalHelp from './GlobalHelp.js';
 
 // TODO: Rename to Details?
 import Group from './GroupView.js';
@@ -24,6 +25,8 @@ class MainView extends Component {
           <Group></Group>
         </div>
         <Tooltip model={tooltip}/>
+
+        <GlobalHelp />
       </div>
       );
   }

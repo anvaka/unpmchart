@@ -9,11 +9,12 @@ class LegendView extends Component {
   render() {
     const { legend, dispatch } = this.props;
     if (!legend) return null;
+    let suffix = 'unique ' + (legend.length > 1 ? 'keys': 'key');
 
     return (
       <div className='legend pkg-panel'>
         <h4>
-          <strong>{formatNumber(legend.length)}</strong> unique keys
+          <strong>{formatNumber(legend.length)}</strong> {suffix}
         </h4>
 
         <div className='list-container'>
