@@ -1,6 +1,7 @@
 # unpmchart
 
-particle chart
+This repository is created for http://www.meetup.com/Seattle-Node-js/. 
+The documentation will be added after event
 
 # install
 
