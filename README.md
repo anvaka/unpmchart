@@ -28,7 +28,6 @@ node collect.js test-clean
 node collect.js test
 ```
 
-
 # license
 
 MIT
